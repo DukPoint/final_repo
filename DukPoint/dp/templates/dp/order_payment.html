@@ -1,0 +1,325 @@
+{% extends 'dp/base.html' %}
+{% load static %}
+{% block main-area %}
+<body>
+    <div class="hero">
+        <div class="hero-text" style="text-align:center">
+        <h2 style="color: #FFFFFF;">Payment</h2>
+            <p style="color: #FFFFFF;">결제를 완료하고 매장으로 픽업하러 가주세요!</p>
+        </div>
+    </div>
+
+    <h3  style="text-align:left">결제하기</h3>
+    <p style="color:#971B44; font-size: smaller;">선택한 상품을 확인 후 결제해 주세요</p>
+    <div class="separator"></div>
+
+    <div class="menu-info">
+        {% if menu %}
+            <div class="menu-left">
+                <b>주문상품</b>
+                <img class="menu-img" src="{{ menu.image.url }}" alt="{{ menu.name }} Image" width="250" height="250">
+            </div>
+            <div class="menu-details">
+                <p class="menu-name" style="color: #971B44;">상품이름 <span style="color: black; text-indent: 3mm;">{{ menu.name }}</span></p>
+                <p class="menu-price" style="color: #971B44;">상품가격 <span style="color: black; text-indent: 3mm;">{{ menu.price }} 원</span></p>
+                <p class="store-point" style="color: #971B44;">적립될 포인트 <span style="color: black; text-indent: 3mm;">{{ store.discount }} 점</span></p>
+            </div>
+
+        {% else %}
+            <p> menu 모델을 가져오지 못하였습니다 </p>
+        {% endif %}
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="payment">
+        <div class="payment-left">
+            <p style="font-size: smaller; border: 1px solid  #971B44; padding: 3px; border-radius:15px;">
+                보유 포인트  <b>{{ user.points }}</b> <!-- {{ user.points }}-->
+            </p>
+            <label for="pointInput">사용할 포인트</label>
+            <div style="display: flex; align-items: center;">
+            <input type="number" id="pointInput" name="pointInput" min="0" style="text-align: right;">
+            <button type="button" onclick="applyPoints()" style="background-color: #971B44; color: white; padding: 5px 10px; border: none;">사용하기</button>
+            </div>
+        </div>
+        <div class="payment-right">
+            <b style="color:black;">최종 결제금액</b>
+            <!--<p>상품 가격 <span style="display: block; text-align: right;">{{ menu.price }}원</span></p>-->
+            <div style="display: flex; justify-content: space-between;">
+               <p style="text-align: left;">상품 가격</p>
+               <p style="text-align: right;">{{ menu.price }}원</p>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <p style="text-align: left;">사용 포인트</p>
+                <p id="appliedPoints" style="text-align: right;"> 0원</p>
+            </div>
+            <div class="payment-right-separator"></div>
+            <div style="display: flex; justify-content: space-between;">
+                <p style="text-align: left; font-weight:bold">총 결제금액</p>
+                <p id="totalAmount" style="text-align: right;"> {{ menu.price}}원</p>
+            </div>
+            <button type="button" onclick="processPayment()" style="background-color: #971B44; color: white; padding: 5px 10px; border: none;">결제하기</button>
+        </div>
+    </div>
+
+</body>
+
+<style>
+    .hero {
+        width: 100%;
+        height: 30vw; /* 30% of viewport width */
+        background: url({% static 'assets/images/hero/payment.png' %}) no-repeat center;
+        background-size: 100% 100%;
+        padding: 12vw; /* 10% of viewport width */
+        margin-bottom:100px;
+    }
+
+    .hero_text {
+        text-align: center;
+        color: #FFFFFF; /* 흰색으로 변경 */
+    }
+
+    p {
+     color:black;
+     margin-top:5px;
+     margin-bottom:5px;
+    }
+
+    .menu-info {
+    display: flex;
+    align-items: center;
+    height:200px;
+    margin-left:30%;
+    margin-bottom:20px;
+    }
+
+    .menu-left {
+    width: 22%;
+    margin:5px;
+    padding:5px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    }
+
+    .menu-img {
+        max-width:100%;
+        height:auto;
+    }
+
+    .menu-details {
+        font-weight: 600;
+    }
+
+    .menu-details p {
+        margin: 3px;
+        margin-bottom: 5px;
+    }
+
+    .store-point,
+    .menu-name,
+    .menu-price {
+        padding-top: 10px;
+        font-weight: 600; /* 텍스트 굵게(bold) 설정 */
+        font-size: 0.9em;
+    }
+
+    .separator {
+    width: 100%;
+    height: 1px;
+    background-color: #ddd; /* Color of the separator */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    }
+
+     .payment {
+        display: flex;
+        justify-content: space-between;
+        width: 80%; /* 전체 폭에 따라 조절 */
+        margin: auto; /* 중앙 정렬을 위해 */
+    }
+
+    .payment-left {
+        width: 45%; /* 전체 폭의 40%를 차지 */
+        padding: 10px;
+        box-sizing: border-box;
+        position: relative;
+        padding-left: 70px;
+    }
+
+    .payment-left p {
+        font-size: smaller;
+        border: 1px solid #971B44;
+        border-radius: 15px;
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 5px 10px;
+    }
+
+    .payment-left label {
+        margin-top: 10px;
+        display: block;
+    }
+
+    .payment-left input {
+        margin-right: 10px;
+        padding: 5px;
+        background-color: #EAEAEA;
+        width: 200px; /* 추가: 입력창의 전체 너비에서 좌우 10px씩 제외 */
+        box-sizing: border-box;
+        border: none;
+        outline: none;
+    }
+
+    .payment-left button {
+        background-color: #971B44;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .payment-right {
+        width:40%; /* 전체 폭의 50%를 차지 */
+        padding: 10px;
+        box-sizing: border-box;
+        position: relative;
+        border: 1px solid #971B44;
+        border: 1px solid #971B44;
+    }
+
+    .payment-right-separator {
+    width: 100%;
+    height: 1px;
+    background-color: #971B44; /* Color of the separator */
+    margin-top: 5px;
+    margin-bottom: 10px;
+    }
+
+    .payment-right b {
+        display: block;
+        font-size: larger;
+        margin-bottom: 10px;
+    }
+
+    .payment-right p {
+        font-size: smaller;
+        font-weight:400;
+        margin: 0 0 10px;
+    }
+
+    .payment-right button {
+        background-color: #971B44;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        width:100%;
+    }
+
+</style>
+
+<script>
+    function applyPoints() {
+        // 사용자가 입력한 포인트를 가져와서 처리
+        var inputElement = document.getElementById("pointInput");
+        var appliedPointsElement = document.getElementById("appliedPoints");
+        appliedPointsElement.innerText = inputElement.value + "점";
+
+        calculateTotalAmount();
+    }
+
+    // totalAmount를 계산하는 함수
+    function calculateTotalAmount() {
+        var menuPrice = {{ menu.price }}; // menu.price 값 가져오기
+        var appliedPoints = parseInt(document.getElementById("pointInput").value) || 0; // appliedPoints 값 가져오기
+
+        // totalAmount 계산 (menu.price에서 appliedPoints를 뺀 값)
+        var totalAmount = menuPrice - appliedPoints;
+
+        // totalAmount를 화면에 업데이트
+        document.getElementById("totalAmount").innerText = totalAmount + "원";
+    }
+
+    function processPayment() {
+        var userPoints = {{ user.points }}; // 사용자 보유 포인트
+        var appliedPoints = parseInt(document.getElementById("pointInput").value) || 0; // 사용한 포인트
+        var storeDiscount = {{ store.discount }}; // 적립될 포인트
+        var newPoints = userPoints - appliedPoints + storeDiscount;
+
+         // Django User 모델의 포인트를 업데이트합니다
+        var userId = {{ user.id }}; // 사용자의 ID를 가져옵니다
+        var csrfToken = "{{ csrf_token }}"; // CSRF 토큰을 가져옵니다
+
+        // 사용자의 포인트를 업데이트하는 AJAX 요청을 보냅니다
+        fetch(`/update/${userId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ points: newPoints })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 서버 응답에 따른 추가 작업을 수행할 수 있습니다
+            console.log(data);
+
+            savePaymentData(newPoints, appliedPoints, csrfToken);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+
+    }
+
+    function savePaymentData(newPoints, appliedPoints, csrfToken) {
+        var userId = {{ user.id }};
+        var storeId = {{ store.id }};
+        var menuId = {{ menu.id }};
+        var totalAmount = parseInt(document.getElementById("totalAmount").innerText) || 0;
+
+        // Create a new FormData object
+        var formData = new FormData();
+        formData.append('user_id', userId);
+        formData.append('store_id', storeId);
+        formData.append('menu_id', menuId);
+        formData.append('user_points', newPoints);
+        formData.append('points_used', appliedPoints);
+        formData.append('total_amount', totalAmount);
+
+        // Send a POST request to save the payment data
+        fetch('/save_payment/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken':csrfToken
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+
+            alert("결제가 완료되었습니다! 매장으로 가서 텀블러/다회용기를 건네주세요!");
+            window.location.href = "{% url 'main' %}";
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+</script>
+
+{% endblock %}

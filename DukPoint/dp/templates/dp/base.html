@@ -1,0 +1,256 @@
+<!-- =========
+
+	Template Name: Play
+	Author: UIdeck
+	Author URI: https://uideck.com/
+	Support: https://uideck.com/support/
+	Version: 1.1
+
+========== -->
+
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DukPoint</title>
+
+
+    <!--====== Favicon Icon ======-->
+    <link
+      rel="shortcut icon"
+      href="assets/images/favicon.svg"
+      type="image/svg"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
+    <!-- ===== All CSS files ===== -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static  'assets/css/animate.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/ud-styles.css' %}" />
+    <style>
+
+      .navbar-nav .nav-item {
+        margin-right: 30px; /* Adjust the right margin for each navigation item */
+      }
+
+      .navbar-toggler {
+        margin-left: 30px; /* Adjust the left margin for the toggler button */
+      }
+
+      .dropdown-content{
+        display : none;
+        position : absolute;
+        z-index : 1; /*다른 요소들보다 앞에 배치*/
+      }
+
+      .dropdown-content a{
+        display: flex;
+        align-items: center; /* 가운데 정렬을 위해 추가 */
+        width: 88px; /* 원하는 가로 크기로 조절 */
+        height: 30%; /* 원하는 세로 크기로 조절 */
+        margin-bottom: 3px; /* 링크 박스 간격 설정 */
+        color: #5F5B5B; /* 기본 텍스트 색상 설정 */
+        text-decoration: none; /* 밑줄 제거 */
+        transition: color 0.3s;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+      .link-box {
+        flex-grow: 1; /* 내용을 가로로 꽉 채우기 위해 추가 */
+        padding: 10px; /* 내부 여백 설정 */
+
+        border-radius: 0px; /* 둥근 테두리 설정 */
+        background-color: #FBEAEA; /* 배경 색상 설정 */
+        margin-right: 10px; /* 링크 박스 간격 설정 */
+        text-align: center; /* 텍스트 가운데 정렬 */
+        cursor: pointer; /* 커서 모양 변경 */
+     }
+     .link-box:last-child {
+      margin-right: 0; /* 마지막 링크 박스의 오른쪽 여백 제거 */
+    }
+
+      .link-box:hover {
+        background-color: #971B44; /* 호버 시 배경 색상 변경 */
+      }
+
+      .ud-hero {
+       background: var(--primary-color);
+       padding-top: 100px;
+    }
+      .ud-footer img {
+       width: 50px; /* Adjust the desired width */
+       height: auto; /* Maintain aspect ratio */
+       margin-right: 10px; /* Adjust margin if needed */
+}
+
+.ud-footer-icons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  }
+
+  .ud-footer-icons img {
+  width: 25px; /* Adjust the desired width */
+  height: auto; /* Maintain aspect ratio */
+  margin: 5px; /* Adjust margin if needed */
+}
+
+      .ud-footer p {
+  color: #aca7a7;
+  font-weight : bold;
+  margin : 4px;
+}
+
+
+    </style>
+  </head>
+  <body>
+
+    <!-- ====== Header Start ====== -->
+   <header class="ud-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <nav class="navbar navbar-expand-lg">
+          <!--dukpoint 로고-->
+          <div style="max-width: 94px; display: flex; align-items: center;">
+            <a href="{% url 'main' %}" style="display: block;">
+                <img src="{% static 'assets/images/logo/logo.png' %}" alt="Logo" style="width: 100%; height: auto; max-width: 100%;" />
+            </a>
+              <span style="margin-left: 10px;"></span> <!-- 로고 설명 텍스트 예시 -->
+          </div>
+          <button class="navbar-toggler">
+            <span class="toggler-icon"> </span>
+            <span class="toggler-icon"> </span>
+            <span class="toggler-icon"> </span>
+          </button>
+
+          <div class="navbar-collapse">
+            <ul id="nav" class="navbar-nav mx-auto">
+              <li class="nav-item">
+                <a class="ud-menu-scroll" href="{% url 'store' %}">매장안내</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="ud-menu-scroll" href="{% url 'review1' %}">후기서비스</a>
+              </li>
+              <li class="nav-item">
+                <a class="ud-menu-scroll" href="{% url 'mypage' %}">마이페이지</a>
+              </li>
+            </ul>
+          </div>
+          <div class="dropdown">
+            <a class="bi bi-person fa-2x" style="font-size: 31px;"></a>
+            <div class="dropdown-content">
+              {% if user.is_authenticated %}
+              <!-- 로그인된 경우 -->
+              <a href="{% url 'my_logout' %}"><div class="link-box">로그아웃</div></a>
+              {% else %}
+              <!-- 로그인되지 않은 경우 -->
+              <a href="{% url 'signin' %}"><div class="link-box">로그인</div></a>
+              <a href="{% url 'signup' %}"><div class="link-box">회원가입</div></a>
+              {% endif %}
+            </div>
+      </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+    <!-- ====== Header End ====== -->
+
+    <!-- ====== Hero Start ====== -->
+    <section class="ud-hero ud-hero-no-top" id="home">
+      <div class="container">
+        {% block main-area %}
+
+
+        {% endblock %}
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="ud-hero-content wow fadeInUp" data-wow-delay=".2s">
+              <h1 class="ud-hero-title">
+              </h1>
+            </div>
+            <div class="ud-hero-image wow fadeInUp" data-wow-delay=".25s">
+              <!--img src="{% static 'assets/images/hero/hero-image.png' %}" alt="hero-image" /-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ====== Hero End ====== -->
+
+    <!-- ====== Footer Start ====== -->
+    <footer class="ud-footer wow fadeInUp" data-wow-delay=".15s">
+
+      <div class="ud-footer-widgets">
+        <div class="container">
+          <div class="row">
+
+            <div class="ud-footer-icons">
+            <img src="{% static 'assets/images/icon/footer_4.png' %}" alt="logo" /></p>
+            <img src="{% static 'assets/images/icon/footer_3.png' %}" alt="logo" /></p>
+            <img src="{% static 'assets/images/icon/footer_2.png' %}" alt="logo" /></p>
+            <img src="{% static 'assets/images/icon/footer_1.png' %}" alt="logo" /></p>
+            </div>
+            <img src="{% static 'assets/images/logo/logo_f.png' %}" alt="logo" style="width: 120px; height: auto; margin: 10px;" /></p>
+            <p>(주)DuckPoint | 5Duk [오덕이들]</p>
+            <p>주경연, 주예지, 김해나, 김다빈, 김진효</p>
+            <p>01369 | 서울 도봉구 삼양로144길 33 (쌍문동, 덕성여자대학교)</p>
+            <p>덕성여자대학교 (ARS) 02-901-8000 | https://www.duksung.ac.kr </p>
+            <p>Copyright (c) DUKSUNG WOMEN'S UNIVERSITY. All right reserved.</p>
+
+            <div class="col-xl-3 col-lg-4 col-md-6">
+              <div class="ud-widget">
+
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+    </footer>
+    <!-- ====== Footer End ====== -->
+
+    <!-- ====== Back To Top Start ====== -->
+    <!-- HTML 코드에 추가 -->
+<a href="javascript:void(0)" class="back-to-top">
+    <i class="bi bi-arrow-up-square-fill"></i>
+</a>
+
+<!-- JavaScript 코드 추가 -->
+<!-- 스크롤 기능 -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var backToTopButton = document.querySelector(".back-to-top");
+
+        window.addEventListener("scroll", function () {
+            // 페이지의 스크롤 위치가 일정 이상 내려갔을 때 버튼을 표시
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        });
+
+        // 버튼을 클릭하면 페이지 상단으로 스크롤
+        backToTopButton.addEventListener("click", function () {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        });
+    });
+</script>
+    <!-- ====== Back To Top End ====== -->
+      <!-- ====== All Javascript Files ====== -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/wow.min.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+  </body>
+  </html>

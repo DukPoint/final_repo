@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+  <head>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+    .search-form {
+        max-width: 50%;
+        margin: 0 auto;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+    body {
+    .color: #5F5B5B;
+
+    }
+    .hero {
+            width: 100%;
+            height: 30vw; /* 30% of viewport width */
+            background: url({% static 'assets/images/hero/review_img.png' %}) no-repeat center;
+            background-size: 100% 100%;
+            padding: 12vw; /* 10% of viewport width */
+    }
+
+    .hero_text {
+        text-align: center;
+        color: #FFFFFF; /* 흰색으로 변경 */
+    }
+
+         #container {
+            display: flex;
+            margin-top: 20px;
+
+        }
+
+        .box1 {
+            width: 500px;
+            height: 480px;
+            margin-left: 40px;
+
+        }
+
+        .box2 {
+            display: none;
+            width: 500px;
+            height: 500px;
+        }
+
+        .box3 {
+            display: flex;
+            flex-direction: column;
+            width: 500px;
+            height: 480px;
+            margin-left: 40px;
+        }
+
+        .rectangle7, .rectangle8 {
+            width: 500px;
+            height: 300px;
+            margin-left: 20px;
+        }
+
+        .rectangle {
+            width: 500px;
+            height: 150px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        main {
+            display: flex;
+            justify-content: flex-start;
+            width: 500px;
+            height: 150px;
+            background-color: white;
+            border: 1px solid #5f5b5b;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+
+        .rectangle-nav, .rectangle-article {
+            position: relative;
+            width: 33%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .rectangle7-nav {
+            position: relative;
+            width: 33%;
+            height: 50%;
+            overflow: hidden;
+        }
+        .rectangle7-article {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-top: 90px;
+            width: 67%;
+            height: 50%;
+            overflow: hidden;
+            align-items:center;
+        }
+
+        .rectangle7-nav img {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 160px;
+            height: 135px;
+            object-fit: cover;
+            max-width: 10000000px;
+        }
+
+        .v-line {
+            border-left: 1px solid #5f5b5b;
+            height: 100%;
+        }
+
+        .rectangle-nav img, .rectangle-article img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            max-width: 10000000px;
+        }
+    .box {
+        width: 500px;
+        height: 480px;
+        margin-left: 40px;
+        display: none; /* 초기에는 숨김 */
+    }
+
+    .box.flex {
+        display: flex; /* .flex 클래스가 추가되면 보이도록 함 */
+    }
+
+    .rectangle {
+        width: 100%;
+        height: 150px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .rectangle-nav {
+        position: relative;
+        width: 33%;
+        height: 100%;
+        overflow: hidden;
+    }
+    .rectangle-article{
+        position: relative;
+        width: 67%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .rectangle-nav img,
+    .rectangle-article img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .rectangle-article h1{
+    display: flex;
+    align-items: center;
+    }
+
+    </style>
+  </head>
+    <body>
+
+<hr>
+   <div id="container">
+    <div class="box1">
+        <div class="rectangle">
+            <main style="position: relative;">
+                <nav class="rectangle-nav">
+                    {% if reviews %}
+                        {% with latest_review=reviews|first %}
+                            <img class="rectangle-nav img" src="{{ latest_review.image.url }}" alt="pic">
+                        {% endwith %}
+                    {% else %}
+                        <img src="{% static 'assets/images/logo/logo.png' %}" alt="logo">
+                    {% endif %}
+                </nav>
+                <article class="rectangle-article">
+                    {% if reviews %}
+                        {% with latest_review=reviews|first %}
+                            <h1 style="font-size: 16px;">{{ latest_review.comment }}</h1>
+                            <hr>
+                            <h2 style="font-size: 13px;position: relative; margin-right: 90px;">가게 이름: {{ latest_review.store }}</h2>
+                            <h3 style="font-size: 13px;position: relative; margin-right: 90px;">글쓴 시각: {{ latest_review.created_at }}</h3>
+                            <h4 style="font-size: 13px;position: relative; margin-right: 90px;">별점: {{ latest_review.star_rating }}</h4>
+                        {% endwith %}
+                    {% else %}
+                        <p style="font-size: 14px;">No first latest review available</p>
+                    {% endif %}
+                </article>
+            </main>
+        </div>
+    </div>
+
+    <div class="box2">
+        <div class="rectangle">
+                <main style="position: relative;">
+                    <nav class="rectangle-nav">
+                        {% if reviews %}
+                            {% with second_latest_review=reviews.1 %}
+                                <img class="rectangle-nav img" src="{{ second_latest_review.image.url }}" alt="pic" >
+                            {% endwith %}
+                            {% else %}
+                            <img src="{% static 'assets/images/logo/logo.png' %}" alt="logo" />
+                        {% endif %}
+                    </nav>
+                    <article class="rectangle-article">
+                        {% if reviews %}
+                            {% if reviews|length >= 2 %}
+                                {% with second_latest_review=reviews.1 %}
+                                    <h1 style="font-size: 16px;position: relative; margin-right: 90px;">{{ second_latest_review.comment }}</h1>
+                                    <hr>
+                                    <h2 style="font-size: 13px;position: relative; margin-right: 90px;">가게 이름: {{ second_latest_review.store }}</h2>
+                                    <h3 style="font-size: 13px;position: relative; margin-right: 90px;">글쓴 시각: {{ second_review.created_at }}</h3>
+                                    <h4 style="font-size: 13px;position: relative; margin-right: 90px;">별점: {{ second_review.star_rating }}</h4>
+                                {% endwith %}
+                            {% else %}
+                                <p style="font-size: 14px;">No second latest review available</p>
+                            {% endif %}
+                        {% else %}
+                            <p style="font-size: 14px;">No reviews available</p>
+                        {% endif %}
+                    </article>
+                </main>
+            </div>
+    </div>
+
+    <div class="box3">
+        <main style="position: relative;">
+                    <nav class="rectangle-nav">
+                        {% if reviews %}
+                            {% with third_latest_review=reviews.2 %}
+                                <img class="rectangle-nav img" src="{{ third_latest_review.image.url }}" alt="pic" >
+                            {% endwith %}
+                            {% else %}
+                            <img src="{% static 'assets/images/logo/logo.png' %}" alt="logo" />
+                        {% endif %}
+                    </nav>
+                    <article class="rectangle-article">
+                        {% if reviews %}
+                            {% if reviews|length >= 3 %}
+                                {% with third_latest_review=reviews.2 %}
+                                    <h1 style="font-size: 16px;position: relative; margin-right: 90px;">{{ third_latest_review.comment }}</h1>
+                                    <hr>
+                                    <h2 style="font-size: 13px;position: relative; margin-right: 90px;">가게 이름: {{ third_latest_review.store }}</h2>
+                                    <h3 style="font-size: 13px;position: relative; margin-right: 90px;">글쓴 시각: {{ third_review.created_at }}</h3>
+                                    <h4 style="font-size: 13px;position: relative; margin-right: 90px;">별점: {{ third_review.star_rating }}</h4>
+                                {% endwith %}
+                            {% else %}
+                                <p style="font-size: 14px;">No third latest review available</p>
+                            {% endif %}
+                        {% else %}
+                            <p style="font-size: 14px;">No reviews available</p>
+                        {% endif %}
+                    </article>
+                </main>
+            </div>
+    </div>
+  </body>

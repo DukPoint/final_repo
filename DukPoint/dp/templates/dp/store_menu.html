@@ -1,0 +1,203 @@
+{% extends 'dp/base.html' %}
+{% load static %}
+{% block main-area %}
+<body>
+    <div class="hero">
+        <div class="hero-text" style="text-align:center">
+        <h2 style="color: #FFFFFF;">Order</h2>
+            <p style="color: #FFFFFF;">원하는 메뉴를 클릭해서 주문해 보세요</p>
+        </div>
+    </div>
+
+    <div class="store-info">
+        {% if store %}
+            <img class="store-img" src="{{ store.image.url }}" alt="{{ menu.name }} Image" width="200" height="200">
+            <div class="store-details">
+                <h2 class="store-name">
+                    <span class="highlight-rectangle"></span>
+                    {{ store.name }}
+                </h2>
+                <p class="store-review"> 리뷰보기</p>
+                <br>
+                {% if store.is_cafe %}
+                <p class="store-discount">텀블러 할인: <b>{{ store.discount }}</b>원</p>
+                {% else %}
+                <p class="store-discount">다회용기 할인: <b>{{ store.discount }}</b>원</p>
+                {% endif%}
+            </div>
+        {% else %}
+            <p> store 모델을 가져오지 못하였습니다 </p>
+        {% endif %}
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="menus">
+        {% if menus %}
+        <h3>Menu</h3>
+        <br>
+            <ul class="menu-list">
+                {% for menu in menus %}
+                <li class="menu-item" onmouseover="highlightMenuItem(this)" onmouseout="unhighlightMenuItem(this)">
+                    <img src="{{ menu.image.url }}" alt="{{ menu.name }} Image" width=150 height="150">
+                    <a href="{% url 'order_payment' menu_id=menu.id store_id=store.id %}">
+                        <div class="order-icon"></div>
+                    </a>
+                        <p>{{ menu.name }}</p>
+                        <p>{{ menu.price }}원</p>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+        <p> menu 모델을 가져오지 못하였습니다 </p>
+        {% endif %}
+    </div>
+
+</body>
+
+<style>
+
+    body {
+    color: #5F5B5B;
+    }
+
+    .hero {
+            width: 100%;
+            height: 30vw; /* 30% of viewport width */
+            background: url({% static 'assets/images/hero/order.png' %}) no-repeat center;
+            background-size: 100% 100%;
+            padding: 12vw; /* 10% of viewport width */
+            margin-bottom:50px;
+    }
+
+    .hero_text {
+        text-align: center;
+        color: #FFFFFF; /* 흰색으로 변경 */
+    }
+
+
+    p {
+     color:black;
+     margin-top:5px;
+     margin-bottom:5px;
+    }
+
+    .store-info {
+    display: flex;
+    align-items: center;
+    height:200px;
+    margin-left:30%;
+    }
+
+    .store-img {
+        max-width:100%;
+        height:auto;
+    }
+
+    .highlight-rectangle {
+    width: 0.2em; /* 원하는 두께로 조절 */
+    height: 1em; /* 원하는 높이로 조절 */
+    background-color: #971B44; /* 빨강색으로 설정 */
+    display: inline-block; /* 텍스트와 인라인으로 배치되도록 설정 */
+    margin-right: 0.1em; /* 텍스트와의 간격 조절 */
+    }
+
+    .store-details {
+        margin-left: 20px; /* 필요에 따라 여백 조절 */
+    }
+
+    .store-details h2,
+    .store-details p {
+        margin: 3px;
+        margin-bottom: 5px;
+    }
+
+    .store-review {
+        color: gray;
+    }
+
+    .store-discount {
+        padding-top: 10px;
+        font-weight: semi-bold; /* 텍스트 굵게(bold) 설정 */
+    }
+
+    .separator {
+    width: 100%;
+    height: 1px;
+    background-color: #ddd; /* Color of the separator */
+    margin-top: 50px;
+    margin-bottom: 30px;
+    }
+
+    .menus {
+        text-align: center; /* Center the content */
+    }
+
+    .menu-list {
+        list-style: none; /* Remove default list styles */
+        padding: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around; /* Adjust as needed */
+        margin-left:100px;
+        margin-right:100px;
+    }
+
+    .menu-item {
+        width: 23%; /* Adjust as needed for 4 items in a row */
+        margin: 5px; /* Reduced margin for a more compact spacing */
+        padding: 10px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .menu-item img {
+        max-width:100%;
+        height:140px;
+        /* width: 100px;height: 100px; */
+        object-fit: cover; /* Maintain aspect ratio for images */
+        border-radius: 0px; /* Add rounded corners for images */
+        margin-bottom: 6px;
+    }
+
+    .menu-item p {
+        padding-bottom: 6px;
+        margin: 5px 0;
+    }
+
+
+    .menu-item {
+    transition: background-color 0.3s ease;
+    position: relative;
+    }
+
+    .menu-item:hover {
+        background-color: #c0c0c0; /* Change to the desired dark color */
+    }
+
+    .order-icon {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px; /* Set the width of the order icon */
+        height: 70px; /* Set the height of the order icon */
+        background: url({% static 'image/ordericon-resize.png' %}) no-repeat center;
+        background-size:cover;
+        padding: 5px;
+        border-radius: 10%;
+        background-color: #c0c0c0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .menu-item:hover .order-icon {
+        display: block;
+     }
+
+
+</style>
+
+{% endblock %}
+
+

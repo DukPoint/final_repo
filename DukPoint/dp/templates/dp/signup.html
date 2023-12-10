@@ -1,0 +1,238 @@
+{% extends 'dp/base.html' %}
+
+{% block main-area %}
+ {% load static %}
+
+<html lang="en" data-bs-theme="auto">
+<head>
+  <meta charset="utf-8">
+
+  <title>회원가입</title>
+  <link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/sign-in/">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"
+        crossorigin="anonymous"></script>
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var consentBox = document.getElementById("consentBox");
+        var showConsent = document.getElementById("showConsent");
+        var showPolicy = document.getElementById("showPolicy");
+
+        showConsent.addEventListener("click", function () {
+            toggleModal("consentModal");
+        });
+
+        showPolicy.addEventListener("click", function () {
+            toggleModal("policyModal");
+        });
+
+        function toggleModal(modalId) {
+            var modal = new bootstrap.Modal(document.getElementById(modalId));
+            modal.toggle();
+        }
+    });
+    </script>
+    <style>
+        p{
+      color: #000000;
+    }
+
+    .show-consent {
+        color: #971B44; /* 이용약관 텍스트 색상 변경 */
+        cursor: pointer;
+    }
+
+    .show-consent:hover {
+        text-decoration: underline;
+    }
+
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .btn-primary {
+        background-color: #971B44;
+        border: none;
+        opacity: 0.7;
+        margin-top: 20px;
+        margin-bottom: 0px;
+    }
+
+    .btn-primary:hover {
+        background-color: #971B44;
+        border: none;
+        opacity: 1.0;
+    }
+
+    .btn_area {
+        bottom: 10px;
+        width: 100%;
+        padding: 0px;
+    }
+
+    .form-floating {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+      .rectangle {
+      w-100;
+      height: 10px;
+      background-color: #ddd;
+      position: relative;
+
+      margin-bottom: 30px;
+    }
+
+    .highlight {
+      position: absolute;
+      width: 20%;
+      height: 100%;
+      background-color: #888;
+    }
+    .ud-menu-scroll{
+    text-decoration: none;
+    }
+
+
+</style>
+
+
+</head>
+
+<body class="bg-light">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <main class="form-signup w-100 m-auto">
+          <form style="padding-top: 10px;" action="{% url 'signup' %}" method="post">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 fw-normal"><strong>간편가입</strong></h1>
+              <div class="rectangle"><div class="highlight"></div></div>
+            <!-- 개인정보 수집 동의 -->
+                    <div class="mb-3">
+                        <label class="form-label" style="color: gray; margin-bottom: 30px;">개인정보 수집/이용동의</label>
+                        <div id="informationConsent">
+                            <span id="consentBox">
+                                <div class="modal fade" id="consentModal" tabindex="-1" aria-labelledby="consentModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="consentModalLabel">이용약관</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- 이용약관 내용을 여기에 추가하세요 -->
+                                                <p>덕포인트 웹사이트 및 서비스의 이용은 본 약관에 동의한 것으로 간주됩니다. 본 약관은 웹사이트 이용과 관련한 모든 사용자에게 적용됩니다.</p>
+                                                <p>1. 덕포인트는 회원에게 주변 음식점과 카페 정보를 제공하며, 회원은 이를 확인하여 이용할 수 있습니다.<br>
+                                                2. 텀블러나 다회용기를 이용하는 회원은 할인 혜택을 받을 수 있습니다.</p>
+                                                <p>3. 회원은 본인의 정보를 정확히 제공하여 덕포인트에 가입해야 합니다.<br>
+                                                    4. 회원은 계정 정보의 보안을 유지해야 하며, 계정 사용에 대한 책임을 져야 합니다.</p>
+                                                <p>5. 덕포인트 회원은 텀블러나 다회용기를 사용하여 주변 가맹점에서 할인 혜택을 받을 수 있습니다.<br>
+                                                    6. 할인 혜택의 세부 사항은 웹사이트에서 안내됩니다.</p>
+                                                <p>7. 회원은 주변 가맹점에서의 경험을 후기로 남길 수 있습니다.<br>
+                                                    8. 후기는 다른 회원들에게 유용한 정보로 활용될 수 있습니다.</p>
+                                                <br><div><p>12/1/2023</p></div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 개인정보 수집 동의 -->
+
+                            <span id="policyBox">
+                                <div class="modal fade" id="policyModal" tabindex="-1" aria-labelledby="policyModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="policyModalLabel">개인정보정책</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- 이용약관 내용을 여기에 추가하세요 -->
+                                                <p>덕포인트 웹사이트 및 서비스의 이용은 본 개인정보정책에 동의한 것으로 간주됩니다. 본 약관은 웹사이트 이용과 관련한 모든 사용자에게 적용됩니다.</p>
+                                                <p>덕포인트는 서비스 제공을 위해 다음과 같은 개인정보를 수집하고 있습니다.<br>- 이메일<br>- 주소사용자의 위치 <br>- 정보결제 정보</p>
+                                                <p>덕포인트는 수집한 개인정보를 다음과 같은 목적으로 이용합니다. <br>- 서비스 제공 및 관리<br>- 회원 가입 및 관리 <br>- 서비스 개선 및 신규 서비스 개발</p>
+                                                <p>덕포인트를 이용하는 사용자는 자신의 개인정보에 대한 권리를 행사할 수 있습니다. 개인정보 열람, 정정, 삭제, 처리정지 등의 권리 행사는 개인정보 보호책임자에게 문의하여 진행할 수 있습니다.</p>
+                                                <br><div><p>12/1/2023</p></div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 style="margin-bottom: 30px;">가입과 동시에 <span id="showConsent" class="show-consent">이용약관</span>과
+                                    <span id="showPolicy" class="show-consent">개인정보정책</span>에 동의하는 것으로 간주됩니다.</h6>
+                                <!-- 세부내용 중략 -->
+                            </span></span>
+                        </div>
+
+                    <label class="form-check">
+                        <input type="checkbox" id="agreedCheckbox" name="agreed" class="form-check-input">
+                        <span style="margin-left: 10px;">만 14세 이상입니다.</span>
+                    </label><br>
+                        <label class="form-check">
+                            <input type="checkbox" id="agreedCheckbox2" name="agreed" class="form-check-input">
+                            <span style="margin-left: 10px;">약관 및 보호정책에 관한 내용을 확인했습니다.</span>
+                        </label>
+                        <span id="agreedError" class="form-text"></span>
+                    </div>
+
+                    <div class="btn_area">
+                        <button type="submit" class="btn btn-primary w-100 py-2" id="btnNext">다음</button>
+                    </div>
+
+          </form>
+        </main>
+      </div>
+      <div class="col-md-9">
+        <!-- Your image goes here -->
+        <img src="{% static random_image %}" class="img-fluid" alt="Responsive image">
+
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    // 다음 버튼 클릭 시 동작
+    document.getElementById("btnNext").addEventListener("click", function (event) {
+        // 이용약관 동의 여부 확인
+        var agreedCheckbox = document.getElementById("agreedCheckbox");
+        var agreedCheckbox2 = document.getElementById("agreedCheckbox2");
+        var agreedError = document.getElementById("agreedError");
+
+        if (!(agreedCheckbox.checked && agreedCheckbox2.checked)) {
+            agreedError.innerText = "모두 동의해야 합니다.";
+            alert("모두 동의해야 합니다.");
+            event.preventDefault();
+            return;
+        }
+
+        // 이용약관 동의가 확인되면 다음 페이지로 이동
+        window.location.href = "{% url 'signup2' %}";
+        event.preventDefault(); // Prevent the default form submission
+
+    });
+</script>
+</body>
+
+</html>
+
+{% endblock %}

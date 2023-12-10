@@ -1,0 +1,155 @@
+{% extends 'dp/base.html' %}
+
+{% block main-area %}
+    {% load static %}
+    <style>
+        body {
+            color: #5F5B5B;
+        }
+
+        .hero {
+            width: 100%;
+            height: 30vw; /* 뷰포트 너비의 30% */
+            background: url({% static 'assets/images/hero/update.png' %}) no-repeat center;
+            background-size: 100% 100%;
+            padding: 12vw; /* 뷰포트 너비의 10% */
+        }
+
+        .hero_text {
+            text-align: center;
+            color: #FFFFFF; /* 흰색으로 변경 */
+        }
+
+        h3 {
+            text-align: center;
+            color: #5F5B5B;
+        }
+
+        .main-content {
+            display: flex;
+            align-items: stretch;
+            flex-direction: column;
+            margin: 0px 120px 0px 120px;
+        }
+
+        .main-content-title {
+            display: flex;
+            flex-direction: column;
+            padding: 80px;
+        }
+
+        .main-content-text h5 {
+            text-align: left; /* 왼쪽 정렬로 변경 */
+            color: #981a45; /* #981a45 색상으로 변경 */
+        }
+
+        /* 버튼 css */
+.setting-button {
+    display: flex;
+    margin: 60px;
+    justify-content: center;
+    margin: 60px;
+}
+
+.change_btn,
+.cancel {
+    width: 170px; /* 적절한 크기로 조정 */
+    height: 50px; /* 적절한 크기로 조정 */
+    border-radius: 5px; /* 둥근 모서리 적용 */
+    cursor: pointer; /* 더 나은 사용자 경험을 위한 포인터 커서 추가 */
+    margin: 20px;
+}
+
+.change_btn {
+    background-color: #971B44;
+    border: none;
+    opacity: 0.7;
+    color: #FFFFFF; /* 텍스트 색상 추가하여 가시성 향상 */
+}
+
+.change_btn:hover {
+    background-color: #971B44;
+    border: none;
+    opacity: 1.0;
+}
+
+.cancel {
+    background-color: #FFFFFF;
+    border: 2px solid #5F5B5B;
+    color: #5F5B5B;
+}
+
+.cancel:hover {
+    background-color: #F2F2F2;
+}
+    </style>
+
+     <div class="hero">
+        <div class="hero_text">
+            <h3 style="color: #FFFFFF;"> My Page </h3>
+            <p>정보 변경</p>
+        </div>
+    </div>
+
+    <div class="main-content-title">
+        <h3>정보 변경</h3>
+    </div>
+
+    <div class="main-content">
+        <div class="main-content-text">
+            <h5>정보 변경하기</h5>
+        </div>
+        <hr>
+
+        <form method="post" action="{% url 'change_password_mypage' %}" id="change-password-form">
+            {% csrf_token %}
+            <p>(변경시에만 입력)</p>
+            <label for="new-password">비밀번호 변경</label>
+            <input type="password" name="new-password" required style="width: 100%; padding: 10px; border: 1px solid #D7D6D6; border-radius: 5px; border-radius: 5px;">
+            <p>(변경시에만 입력)</p>
+            <label for="confirm-password">비밀번호 변경 확인:</label>
+            <input type="password" name="confirm-password" required style="width: 100%; padding: 10px; border: 1px solid #D7D6D6; border-radius: 5px; border-radius: 5px;">
+            <div class="setting-button">
+            <button type="submit" class="change_btn">비밀번호 변경</button>
+            <button type="button" onclick="goToMyPage()" class="cancel">취소</button>
+        </div>
+        </form>
+
+    <script>
+    // 비밀번호 변경 결과를 처리하는 함수
+    function handlePasswordChangeResponse(response) {
+        if (response.success) {
+            // 비밀번호 변경 성공 시 경고창 표시
+            alert('비밀번호가 변경되었습니다.');
+            // 비밀번호 변경 성공 시 mypage.html로 이동
+            window.location.href = '{% url "mypage" %}';
+        } else if (response.error) {
+            // 비밀번호 변경 실패 시 경고창 표시
+            alert(response.error);
+        }
+    }
+
+    // 폼 제출 시 비동기적으로 서버에 요청을 보냄
+    document.getElementById("change-password-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+
+        fetch(this.action, {
+            method: this.method,
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+            },
+        })
+        .then(response => response.json())
+        .then(handlePasswordChangeResponse)
+        .catch(error => console.error('Error:', error));
+    });
+    // 취소 버튼 클릭 시 mypage.html로 이동
+       function goToMyPage() {
+            window.location.href = "{% url 'mypage' %}";
+       }
+
+</script>
+
+{% endblock %}

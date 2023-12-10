@@ -1,0 +1,115 @@
+{% extends 'dp/base.html' %}
+
+{% block main-area %}
+{% load static %}
+
+<style>
+  body {
+    color: #5F5B5B;
+    margin: 0; /* Body의 기본 마진 제거 */
+  }
+
+  h3 {
+    text-align: center;
+    color: #5F5B5B;
+  }
+
+  .review-link {
+    color: #5F5B5B;
+    text-align: right;
+    margin-right: 10px; /* 링크와의 간격을 조절 */
+  }
+
+  .horizontal-align {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+  }
+
+  .img-slide-container {
+    position: relative; /* 상대 위치 지정 */
+    margin-bottom: 50px; /* 높이 여백 추가 */
+  }
+
+  .main-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 750px;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+
+  .circle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px; /* 높이 여백 추가 */
+  }
+
+  /* 호버 시 배경색 변경을 위한 스타일 추가 */
+  .circle-box:hover {
+    background-color: #999; /* 원하는 색상으로 변경하세요 */
+  }
+
+  .circle-box {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  .link-icon {
+    max-width: 20px;
+    max-height: 20px;
+    width: auto;
+    height: auto;
+  }
+
+  .rounded-container {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 20px; /* 좌우 여백 추가 */
+    margin-bottom: 50px; /* 높이 여백 추가 */
+  }
+
+  .rounded-box {
+    display: inline-block;
+    width: 300px;
+    height: 200px;
+    background-color: #ccc;
+    /* border-radius: 10px; */
+    background-color: #fff; /* 흰색 배경색 */
+    border: 5px solid #5F5B5B; /* 2px 두께의 #5F5B5B 테두리 */
+    margin-right: 10px;
+  }
+</style>
+
+<!-- 이미지 넣기 -->
+<div id="img-slide-container">
+<img class="main-img" id="main-img" src="{% static 'assets/images/hero/main_img_1.png' %}" alt="main_1" />
+  <!-- 동그라미를 가운데 정렬하기 위한 추가적인 div -->
+  <div class="circle-container">
+    <!-- 이미지 변경 버튼을 담은 컨테이너 -->
+    <div class="img-slide">
+      <!-- 세 개의 둥근 사각형 추가 -->
+      <div class="circle-box" onclick="changeImage(1)"></div>
+      <div class="circle-box" onclick="changeImage(2)"></div>
+      <div class="circle-box" onclick="changeImage(3)"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 이미지 변경을 담당하는 함수
+  function changeImage(imageNumber) {
+    var imageElement = document.getElementById('main-img');
+    var imagePath = `{% static 'assets/images/hero/main_img_' %}${imageNumber}.png`;
+    imageElement.src = imagePath;
+  }
+
+</script>
+{% endblock %}

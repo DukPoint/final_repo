@@ -1,0 +1,195 @@
+{% extends 'dp/base.html' %}
+
+{% block main-area %}
+ {% load static %}
+
+<html lang="en" data-bs-theme="auto">
+<head>
+  <meta charset="utf-8">
+
+  <title>회원가입</title>
+  <link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/sign-in/">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"
+        crossorigin="anonymous"></script>
+
+
+
+    <style>
+
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .btn-primary {
+        background-color: #971B44;
+        border: none;
+        opacity: 0.7;
+        margin-top: 20px;
+        margin-bottom: 0px;
+    }
+
+    .btn-primary:hover {
+        background-color: #971B44;
+        border: none;
+        opacity: 1.0;
+    }
+
+    .btn_area {
+        bottom: 10px;
+        width: 100%;
+        padding: 0px;
+    }
+
+    .form-floating {
+        /* margin-top: 20px; */
+        margin-bottom: 20px;
+    }
+
+      .rectangle {
+      w-100;
+      height: 10px;
+      background-color: #ddd;
+      position: relative;
+
+      margin-bottom: 30px;
+    }
+
+    .highlight {
+      position: absolute;
+      width: 60%;
+      height: 100%;
+      background-color: #888;
+    }
+    .ud-menu-scroll{
+    text-decoration: none;
+    }
+
+
+
+</style>
+
+
+</head>
+
+<body class="bg-light">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <main class="form-signup2 w-100 m-auto">
+          <form style="padding-top: 10px;" action="{% url 'signup3' %}" method="post">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 fw-normal"><strong>간편가입</strong></h1>
+              <div class="rectangle"><div class="highlight"></div></div>
+            <!-- 비밀번호 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label" style="color: gray;">비밀번호를 만들어주세요</label>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                            <label for="password">Password</label>
+                        </div>
+                    </div>
+
+                    <!-- 비밀번호 확인 입력 -->
+                    <div class="mb-3">
+                        <label class="form-label" style="color: gray;">비밀번호 확인</label>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                            <label for="confirmPassword">Confirm Password</label>
+                        </div>
+                    </div>
+
+                    <!-- 비밀번호 강도 표시 -->
+                    <div id="passwordStrength"></div>
+              <div class="btn_area">
+                  <button type="submit" class="btn btn-primary w-100 py-2" id="btnNext" onclick="submitForm()">다음</button>
+              </div>
+          </form>
+        </main>
+      </div>
+      <div class="col-md-9">
+        <!-- Your image goes here -->
+        <img src="{% static random_image %}" class="img-fluid" alt="Responsive image">
+
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</body>
+<script>
+    function submitForm() {
+        // 비밀번호와 비밀번호 확인 값 가져오기
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+
+        // 간단한 유효성 검사: 비밀번호와 비밀번호 확인이 일치하는지 확인
+        if (password !== confirmPassword) {
+            alert('비밀번호가 일치하지 않습니다.');
+            event.preventDefault();
+            return false;
+        }
+
+        // 여기서 다른 페이지로 이동하도록 처리
+        window.location.href = "{% url 'signup4' %}";
+        return true;
+    }
+
+    // 비밀번호 강도 표시
+    document.getElementById('password').addEventListener('input', function () {
+        var passwordStrength = document.getElementById('passwordStrength');
+        var password = document.getElementById('password').value;
+        var strength = 0;
+
+        if (password.match(/[a-z]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[A-Z]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[0-9]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[$@#&!]+/)) {
+            strength += 1;
+        }
+
+        if (password.length >= 8) {
+            strength += 1;
+        }
+
+        switch (strength) {
+            case 0:
+                passwordStrength.innerHTML = '';
+                break;
+            case 1:
+            case 2:
+                passwordStrength.innerHTML = 'Weak';
+                passwordStrength.style.color = 'red';
+                break;
+            case 3:
+            case 4:
+                passwordStrength.innerHTML = 'Medium';
+                passwordStrength.style.color = 'orange';
+                break;
+            case 5:
+                passwordStrength.innerHTML = 'Strong';
+                passwordStrength.style.color = 'green';
+                break;
+        }
+    });
+</script>
+
+</html>
+
+{% endblock %}

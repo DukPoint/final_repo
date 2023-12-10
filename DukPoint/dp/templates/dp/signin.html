@@ -1,0 +1,119 @@
+{% extends 'dp/base.html' %}
+
+{% block main-area %}
+ {% load static %}
+
+<html lang="en" data-bs-theme="auto">
+<head>
+  <meta charset="utf-8">
+
+  <title>로그인</title>
+  <link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/sign-in/">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"
+        crossorigin="anonymous"></script>
+  <style>
+    p{
+      color: #000000;
+    }
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .btn-primary {
+        background-color: #971B44;
+        border: none;
+        opacity: 0.7;
+        margin-top: 20px;
+    }
+
+    .btn-primary:hover {
+        background-color: #971B44;
+        border: none;
+        opacity: 1.0;
+    }
+
+    .form-floating {
+        margin-bottom: 20px;
+    }
+    /* 네비바 밑줄 수정 */
+    .ud-menu-scroll{
+    text-decoration: none;
+    }
+</style>
+  <script>
+    $(document).ready(function() {
+      // 폼이 변경될 때마다 호출되는 함수
+      function checkFormValidity() {
+        var formValid = $('#login-form')[0].checkValidity();
+        // 폼이 유효하면 버튼 활성화
+        $('#login-button').prop('disabled', !formValid);
+      }
+
+      // 폼이 변경될 때마다 checkFormValidity 함수 호출
+      $('#login-form').change(checkFormValidity);
+
+      // 초기에도 폼의 유효성을 체크하여 버튼 활성화 여부 설정
+      checkFormValidity();
+    });
+  </script>
+
+</head>
+
+<body class="bg-light">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <main class="form-signin w-100 m-auto">
+          <form style="padding-top: 50px;" id="login-form" action="{% url 'signin' %}" method="post">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 fw-normal"><strong>안녕하세요</strong></h1>
+            <label class="form-label" style="color: gray;">로그인해 주세요</label>
+            <div class="form-floating">
+              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email">
+              <label for="floatingInput">Email address(ID)</label>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+              <label for="floatingPassword">Password</label>
+            </div>
+            {% if messages %}
+            <div>
+              {% for message in messages %}
+              {{ message.message }}
+              {% endfor %}
+            </div>
+            {% endif %}
+            <button id="login-button" class="btn btn-primary w-100 py-2" type="submit" disabled>로그인</button>
+            <p style="margin-top: 20px; text-align: center;">계정이 없으신가요?
+              <a href="{% url 'signup' %}" style="margin-left: 10px;">회원가입</a></p>
+          </form>
+        </main>
+      </div>
+      <div class="col-md-9">
+        <!-- Your image goes here -->
+        <img src="{% static random_image %}" class="img-fluid" alt="Responsive image">
+
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+</body>
+
+
+</html>
+
+{% endblock %}

@@ -1,0 +1,304 @@
+{% extends 'dp/base.html' %}
+
+{% block main-area %}
+{% load static %}
+<style xmlns:text-align="http://www.w3.org/1999/xhtml">
+    .search-form {
+        max-width: 50%;
+        margin: 0 auto;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    #map {
+        width: 100%;
+        height: 600px;
+    }
+
+    .wrap {
+        position: absolute;
+        left: 0;
+        bottom: 40px;
+        width: 288px;
+        height: 132px;
+        margin-left: -144px;
+        text-align: left;
+        overflow: hidden;
+        font-size: 12px;
+        font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+        line-height: 1.5;
+    }
+
+    .wrap * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .wrap .info {
+        width: 286px;
+        height: 120px;
+        border-radius: 5px;
+        border-bottom: 2px solid #ccc;
+        border-right: 1px solid #ccc;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .wrap .info:nth-child(1) {
+        border: 0;
+        box-shadow: 0px 1px 2px #888;
+    }
+
+    .info .title {
+        padding: 5px 0 0 10px;
+        height: 30px;
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .info .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: #888;
+        width: 17px;
+        height: 17px;
+        background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
+    }
+
+    .info .close:hover {
+        cursor: pointer;
+    }
+
+    .info .body {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info .desc {
+        position: relative;
+        margin: 13px 0 0 90px;
+        height: 75px;
+    }
+
+    .desc .ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .desc .jibun {
+        font-size: 11px;
+        color: #888;
+        margin-top: -2px;
+    }
+
+    .info .img {
+        position: absolute;
+        top: 6px;
+        left: 5px;
+        width: 73px;
+        height: 71px;
+        border: 1px solid #ddd;
+        color: #888;
+        overflow: hidden;
+    }
+
+    .info:after {
+        content: '';
+        position: absolute;
+        margin-left: -12px;
+        left: 50%;
+        bottom: 0;
+        width: 22px;
+        height: 12px;
+        background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+    }
+
+    .info .link {
+        color: #5085BB;
+    }
+
+     .store{
+         width: 100%;
+         height: 30vw; /* 30% of viewport width */
+         background: url({% static 'assets/images/storeImg/coffee_.jpg' %}) no-repeat center;
+         background-size: 200% 200%;
+         padding: 10vw; /* 10% of viewport width */
+     }
+
+    .store_text{
+        color:white
+    }
+
+
+</style>
+
+<body>
+<div class="store wow fadeInUp" data-wow-delay=".25s">
+
+    <div class="store_text" style="text-align: center;">
+    <h2 style="color:white">Store</h2>
+    덕성여대 근처 다회용기 할인 가능 매장을 찾아보세요
+    <br><br>
+    </div>
+
+    <form class="d-flex search-form" role="search" method="GET" action="{% url 'search' %}" id="searchForm">
+        <input class="form-control me-2 search-input" type="search" name="query" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </form>
+
+</div>
+
+
+
+    <div style="text-align: center;">
+        <br>
+        {% if stores %}
+        {% else %}
+            <p style="color:black">다른 가게를 검색해보세요!</p>
+        {% endif %}
+        <br>
+        <br>
+
+        <h3>매장안내</h3>
+        원하시는 매장을 선택하세요
+        <br><br>
+    </div>
+
+    <div id="map"></div>
+
+    <div id="lat" style="display: none">
+        {% for s in stores %}
+            {{s.latitude}},
+        {% endfor %}
+    </div>
+
+    <div id="lng" style="display: none">
+        {% for s in stores %}
+            {{s.longitude}},
+        {% endfor %}
+    </div>
+
+    <div id="name" style="display: none">
+        {% for s in stores %}
+            {{s.name}},
+        {% endfor %}
+    </div>
+
+    <div id="location" style="display: none">
+        {% for s in stores %}
+            {{s.location}},
+        {% endfor %}
+    </div>
+
+    <div id="phone" style="display: none">
+        {% for s in stores %}
+            {{s.phone}},
+        {% endfor %}
+    </div>
+
+    <div id="image" style="display: none">
+        {% for s in stores %}
+            {{s.image.url}},
+        {% endfor %}
+    </div>
+
+    <div id="pk" style="display: none">
+        {% for s in stores %}
+            {{s.pk}},
+        {% endfor %}
+    </div>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a31ea3e295fc7de01edd2da4e1d9d7ad&libraries=services,clusterer,drawing"></script>
+    <script>
+        var container = document.getElementById('map');
+        var options = {
+            center: new kakao.maps.LatLng(37.653672, 127.015532),
+            level: 4
+        };
+        var map = new kakao.maps.Map(container, options);
+
+        var list_lat = document.getElementById("lat").innerText.split(',');
+        var list_lng = document.getElementById("lng").innerText.split(',');
+        var list_name = document.getElementById("name").innerText.split(',');
+        var list_location = document.getElementById("location").innerText.split(',');
+        var list_phone = document.getElementById("phone").innerText.split(',');
+        var list_image = document.getElementById("image").innerText.split(',');
+        var list_pk = document.getElementById("pk").innerText.split(',');
+
+        var storeArray = new Array();
+        var overlay; // overlay 변수 전역으로 선언
+
+        for (var index = 0; index < list_lat.length; index++) {
+            var latitude = list_lat[index];
+            var longitude = list_lng[index];
+            storeArray.push(new kakao.maps.LatLng(latitude, longitude));
+        }
+
+        for (var index = 0; index < storeArray.length; index++) {
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: storeArray[index],
+                title: list_name[index]
+            });
+
+            (function (marker, storePosition, storeName,storeLocation,storePhone,storeImage,storePk) {
+                var content = '<div class="wrap">' +
+                    '    <div class="info">' +
+                    '        <div class="title">' +
+                    storeName +
+                    '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+                    '        </div>' +
+                    '        <div class="body">' +
+                    '            <div class="img">' +
+                    storeImage+
+                    '           </div>' +
+                    '            <div class="desc">' +
+                    '                <div class="ellipsis">'+storeLocation+'</div>' +
+                    '                <div class="ellipsis">'+storePhone+'</div>' +
+                    '                <div><button class="btn" style="background-color: #971B44;" onclick="goToStoreMenu(' + storePk + ')"><span style="color:white">주문하기</span></button></div>' +
+                    '            </div>' +
+                    '        </div>' +
+                    '    </div>' +
+                    '</div>';
+
+                kakao.maps.event.addListener(marker, 'click', function () {
+                    // Close existing overlay before opening a new one
+                    if (overlay) {
+                        overlay.setMap(null);
+                    }
+
+                    overlay = new kakao.maps.CustomOverlay({
+                        content: content,
+                        map: map,
+                        position: marker.getPosition()
+                    });
+
+                    overlay.setMap(map);
+                });
+
+            })(marker, storeArray[index], list_name[index],list_location[index],list_phone[index],'<img src="' + list_image[index] + '" style="max-width: 100%; max-height: 100%;" alt="가게 이미지">', list_pk[index]);
+        }
+
+        function goToStoreMenu(storePk) {
+            var url = '/store_menu/' + storePk + '/';
+            window.location.href = url;
+        }
+
+        function closeOverlay() {
+            overlay.setMap(null);
+        }
+
+</script>
+
+
+</body>
+
+{% endblock %}
+
+
